@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75082ed9-fe19-4faf-82bd-d7191c2d985e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/article/homepage.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ArticleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ArticleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -126,7 +123,7 @@
       <workItem from="1568120258380" duration="2083000" />
       <workItem from="1568204631041" duration="3511000" />
       <workItem from="1568292102390" duration="1368000" />
-      <workItem from="1568377128102" duration="1883000" />
+      <workItem from="1568377128102" duration="2375000" />
     </task>
     <servers />
   </component>
