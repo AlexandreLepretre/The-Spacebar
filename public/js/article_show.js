@@ -5,6 +5,9 @@ $(function () {
         const link = $(event.currentTarget);
         link.toggleClass('fa-heart-o').toggleClass('fa-heart');
 
-        $('.js-like-article-count').html('TEST');
+        $.ajax({method: 'POST', url: link.attr('href')})
+            .done(function (response) {
+                $('.js-like-article-count').html(response.hearts);
+            });
     });
 });
