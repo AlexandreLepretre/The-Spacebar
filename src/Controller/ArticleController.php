@@ -13,6 +13,20 @@ use Symfony\Component\HttpFoundation\Response;
 class ArticleController extends AbstractController
 {
     /**
+     * @var bool
+     */
+    private $isDebug;
+
+    /**
+     * ArticleController constructor.
+     * @param bool $isDebug
+     */
+    public function __construct(bool $isDebug)
+    {
+        $this->isDebug = $isDebug;
+    }
+
+    /**
      * @Route("/", name="app_homepage")
      */
     public function homepage()
@@ -24,10 +38,11 @@ class ArticleController extends AbstractController
      * @Route("/news/{slug}", name="article_show")
      * @param string $slug
      * @param MarkdownHelper $markdownHelper
+     * @param bool $isDebug
      * @return Response
      * @throws InvalidArgumentException
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, bool $isDebug)
     {
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
