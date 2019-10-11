@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,28 +16,27 @@ class ArticleStatsCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Returns some article stats')
+            ->setDescription('Returns some article stats!')
             ->addArgument('slug', InputArgument::REQUIRED, 'The article\'s slug')
-            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'text');
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'text')
+        ;
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @throws Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
         $slug = $input->getArgument('slug');
 
-        $data = ['slug' => $slug, 'hearts' => rand(10, 100)];
+        $data = [
+            'slug' => $slug,
+            'hearts' => rand(10, 100),
+        ];
 
         switch ($input->getOption('format')) {
             case 'text':
                 $rows = [];
-                foreach ($data as $key => $value) {
-                    $rows[] = [$key, $value];
+                foreach ($data as $key => $val) {
+                    $rows[] = [$key, $val];
                 }
                 $io->table(['Key', 'Value'], $rows);
                 break;
@@ -46,7 +44,7 @@ class ArticleStatsCommand extends Command
                 $io->write(json_encode($data));
                 break;
             default:
-                throw new Exception('What kind of crazy format is that!?');
+                throw new \Exception('What kind of crazy format is that!?');
         }
     }
 }
