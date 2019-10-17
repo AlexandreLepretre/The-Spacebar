@@ -3,15 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Service\MarkdownHelper;
 use App\Service\SlackClient;
 use Doctrine\ORM\EntityManagerInterface;
+use Http\Client\Exception;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ArticleController
+ * @package App\Controller
+ */
 class ArticleController extends AbstractController
 {
     /**
@@ -44,6 +48,7 @@ class ArticleController extends AbstractController
      * @param SlackClient $slack
      * @param EntityManagerInterface $entityManager
      * @return Response
+     * @throws Exception
      */
     public function show($slug, SlackClient $slack, EntityManagerInterface $entityManager)
     {

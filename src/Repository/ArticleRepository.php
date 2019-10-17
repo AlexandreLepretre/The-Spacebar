@@ -11,9 +11,15 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Article|null findOneBy(array $criteria, array $orderBy = null)
  * @method Article[]    findAll()
  * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * Class ArticleRepository
+ * @package App\Repository
  */
 class ArticleRepository extends ServiceEntityRepository
 {
+    /**
+     * ArticleRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Article::class);

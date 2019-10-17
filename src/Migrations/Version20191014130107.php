@@ -10,6 +10,8 @@ use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
+ * Class Version20191014130107
+ * @package DoctrineMigrations
  */
 final class Version20191014130107 extends AbstractMigration
 {

@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,19 +10,33 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Class ArticleStatsCommand
+ * @package App\Command
+ */
 class ArticleStatsCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'article:stats';
 
+    /**
+     *
+     */
     protected function configure()
     {
-        $this
-            ->setDescription('Returns some article stats!')
+        $this->setDescription('Returns some article stats!')
             ->addArgument('slug', InputArgument::REQUIRED, 'The article\'s slug')
-            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'text')
-        ;
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'text');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     * @throws Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -44,7 +59,7 @@ class ArticleStatsCommand extends Command
                 $io->write(json_encode($data));
                 break;
             default:
-                throw new \Exception('What kind of crazy format is that!?');
+                throw new Exception('What kind of crazy format is that!?');
         }
     }
 }

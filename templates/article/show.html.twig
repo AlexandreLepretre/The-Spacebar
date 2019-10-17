@@ -29,9 +29,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="article-text">
-                                {{ article.content|markdown }}
-                            </div>
+                            <div class="article-text">{{ article.content|cached_markdown }}</div>
                         </div>
                     </div>
                     <div class="row">
