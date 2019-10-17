@@ -6,7 +6,6 @@ use App\Service\MarkdownHelper;
 use Psr\Cache\InvalidArgumentException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
