@@ -25,11 +25,11 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-//    /**
-//     * @return Article[] Returns an array of Article objects
-//     */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $value
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findAllPublishedOrderedByNewest($value)
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
@@ -40,17 +40,4 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Article
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

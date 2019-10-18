@@ -35,11 +35,17 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/", name="app_homepage")
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function homepage()
+    public function homepage(EntityManagerInterface $entityManager)
     {
-        return $this->render('article/homepage.html.twig');
+        $repository = $entityManager->getRepository(Article::class);
+        dump($repository);
+        die;
+        $articles = $repository->findBy([], ['publishedAt' => 'DESC']);
+
+        return $this->render('article/homepage.html.twig', ['articles' => $articles]);
     }
 
     /**
