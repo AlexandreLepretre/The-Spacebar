@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use App\Service\SlackClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Http\Client\Exception;
@@ -35,16 +36,12 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/", name="app_homepage")
-     * @param EntityManagerInterface $entityManager
+     * @param ArticleRepository $repository
      * @return Response
      */
-    public function homepage(EntityManagerInterface $entityManager)
+    public function homepage(ArticleRepository $repository)
     {
-        $repository = $entityManager->getRepository(Article::class);
-        dump($repository);
-        die;
-        $articles = $repository->findBy([], ['publishedAt' => 'DESC']);
-
+        $articles = $repository->findAllPublishedOrderedByNewest();
         return $this->render('article/homepage.html.twig', ['articles' => $articles]);
     }
 
@@ -52,17 +49,16 @@ class ArticleController extends AbstractController
      * @Route("/news/{slug}", name="article_show")
      * @param string $slug
      * @param SlackClient $slack
-     * @param EntityManagerInterface $entityManager
+     * @param ArticleRepository $repository
      * @return Response
      * @throws Exception
      */
-    public function show($slug, SlackClient $slack, EntityManagerInterface $entityManager)
+    public function show($slug, SlackClient $slack, ArticleRepository $repository)
     {
         if ($slug === 'khaaaaaan') {
             $slack->sendMessage('Kahn', 'Ah, Kirk, my old friend...');
         }
 
-        $repository = $entityManager->getRepository(Article::class);
         $article = $repository->findOneBy(['slug' => $slug]);
 
         if (!$article) {
