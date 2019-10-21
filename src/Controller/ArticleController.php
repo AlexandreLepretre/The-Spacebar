@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use App\Service\SlackClient;
-use Doctrine\ORM\EntityManagerInterface;
 use Http\Client\Exception;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -47,22 +46,15 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/news/{slug}", name="article_show")
-     * @param string $slug
+     * @param Article $article
      * @param SlackClient $slack
-     * @param ArticleRepository $repository
      * @return Response
      * @throws Exception
      */
-    public function show($slug, SlackClient $slack, ArticleRepository $repository)
+    public function show(Article $article, SlackClient $slack)
     {
-        if ($slug === 'khaaaaaan') {
+        if ($article->getSlug() === 'khaaaaaan') {
             $slack->sendMessage('Kahn', 'Ah, Kirk, my old friend...');
-        }
-
-        $article = $repository->findOneBy(['slug' => $slug]);
-
-        if (!$article) {
-            throw $this->createNotFoundException(sprintf('No article for slug: "%s"', $slug));
         }
 
         $comments = [
