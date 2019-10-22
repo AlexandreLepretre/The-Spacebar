@@ -40,6 +40,21 @@ class Article
     private $publishedAt;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $author;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $heartCount = 0;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageFilename;
+
+    /**
      * @return int
      */
     public function getId()
@@ -121,5 +136,70 @@ class Article
         $this->publishedAt = $publishedAt;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param string $author
+     * @return $this
+     */
+    public function setAuthor(string $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getHeartCount(): ?int
+    {
+        return $this->heartCount;
+    }
+
+    /**
+     * @param int $heartCount
+     * @return $this
+     */
+    public function setHeartCount(int $heartCount): self
+    {
+        $this->heartCount = $heartCount;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    /**
+     * @param string|null $imageFilename
+     * @return $this
+     */
+    public function setImageFilename(?string $imageFilename): self
+    {
+        $this->imageFilename = $imageFilename;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImagePath()
+    {
+        return 'images/' . $this->getImageFilename();
     }
 }
