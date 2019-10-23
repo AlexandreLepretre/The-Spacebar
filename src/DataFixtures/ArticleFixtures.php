@@ -40,7 +40,6 @@ class ArticleFixtures extends BaseFixture
     {
         $this->createMany(Article::class, 10, function (Article $article, int $count) {
             $article->setTitle($this->faker->randomElement(self::$articleTitles))
-                ->setSlug($this->faker->slug)
                 ->setContent('Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
 lorem proident [beef ribs](https://baconipsum.com/) aute enim veniam ut cillum pork chuck picanha. Dolore reprehenderit
 labore minim pork belly spare ribs cupim short loin in. Elit exercitation eiusmod dolore cow
