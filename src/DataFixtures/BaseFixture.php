@@ -49,7 +49,7 @@ abstract class BaseFixture extends Fixture
     {
         for ($iteration = 0; $iteration < $count; $iteration++) {
             $entity = new $className();
-            $factory($entity, $iteration);
+            $factory($entity);
 
             $this->manager->persist($entity);
             // store fr usage later as App\Entity\ClassName_#COUNT#

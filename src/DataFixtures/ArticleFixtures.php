@@ -38,7 +38,7 @@ class ArticleFixtures extends BaseFixture
      */
     protected function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function (Article $article, int $count) {
+        $this->createMany(Article::class, 10, function (Article $article) {
             $article->setTitle($this->faker->randomElement(self::$articleTitles))
                 ->setContent('Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
 lorem proident [beef ribs](https://baconipsum.com/) aute enim veniam ut cillum pork chuck picanha. Dolore reprehenderit
