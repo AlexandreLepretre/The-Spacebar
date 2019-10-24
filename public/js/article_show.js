@@ -1,16 +1,15 @@
-$(() => {
-    $('.js-like-article').on('click', event => {
-        event.preventDefault();
+$(document).ready(function() {
+    $('.js-like-article').on('click', function(e) {
+        e.preventDefault();
 
-        const link = $(event.currentTarget);
-        link.toggleClass('fa-heart-o').toggleClass('fa-heart');
+        var $link = $(e.currentTarget);
+        $link.toggleClass('fa-heart-o').toggleClass('fa-heart');
 
         $.ajax({
             method: 'POST',
-            url: link.attr('href')
-        }).done(data => {
+            url: $link.attr('href')
+        }).done(function(data) {
             $('.js-like-article-count').html(data.hearts);
-        }).then(() => {
         })
     });
 });

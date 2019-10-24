@@ -12,46 +12,46 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Article|null findOneBy(array $criteria, array $orderBy = null)
  * @method Article[]    findAll()
  * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * Class ArticleRepository
- * @package App\Repository
  */
 class ArticleRepository extends ServiceEntityRepository
 {
-    /**
-     * ArticleRepository constructor.
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Article::class);
     }
 
     /**
-     * @return Article[] Returns an array of Article objects
+     * @return Article[]
      */
     public function findAllPublishedOrderedByNewest()
     {
         return $this->addIsPublishedQueryBuilder()
             ->orderBy('a.publishedAt', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
-    /**
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    private function addIsPublishedQueryBuilder(QueryBuilder $queryBuilder = null)
+    /*
+    public function findOneBySomeField($value): ?Article
     {
-        return $this->getOrCreateQueryBuilder($queryBuilder)->andWhere('a.publishedAt IS NOT NULL');
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
+
+    private function addIsPublishedQueryBuilder(QueryBuilder $qb = null)
+    {
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('a.publishedAt IS NOT NULL');
     }
 
-    /**
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null)
+    private function getOrCreateQueryBuilder(QueryBuilder $qb = null)
     {
-        return $queryBuilder ?: $this->createQueryBuilder('a');
+        return $qb ?: $this->createQueryBuilder('a');
     }
 }

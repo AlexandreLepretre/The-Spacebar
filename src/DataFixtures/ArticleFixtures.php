@@ -3,44 +3,33 @@
 namespace App\DataFixtures;
 
 use App\Entity\Article;
-use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
-use Exception;
 
-/**
- * Class ArticleFixtures
- * @package App\DataFixtures
- */
 class ArticleFixtures extends BaseFixture
 {
-    /**
-     * @var array
-     */
     private static $articleTitles = [
         'Why Asteroids Taste Like Bacon',
         'Life on Planet Mercury: Tan, Relaxing and Fabulous',
         'Light Speed Travel: Fountain of Youth or Fallacy',
     ];
 
-    /**
-     * @var array
-     */
-    private static $articleImages = ['asteroid.jpeg', 'mercury.jpeg', 'lightspeed.png'];
+    private static $articleImages = [
+        'asteroid.jpeg',
+        'mercury.jpeg',
+        'lightspeed.png',
+    ];
 
-    /**
-     * @var array
-     */
-    private static $articleAuthors = ['Mike Ferengi', 'Amy Oort'];
+    private static $articleAuthors = [
+        'Mike Ferengi',
+        'Amy Oort',
+    ];
 
-    /**
-     * @param ObjectManager $manager
-     * @throws Exception
-     */
-    protected function loadData(ObjectManager $manager)
+    public function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function (Article $article) {
+        $this->createMany(Article::class, 10, function(Article $article, $count) {
             $article->setTitle($this->faker->randomElement(self::$articleTitles))
-                ->setContent('Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
+                ->setContent(<<<EOF
+Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
 lorem proident [beef ribs](https://baconipsum.com/) aute enim veniam ut cillum pork chuck picanha. Dolore reprehenderit
 labore minim pork belly spare ribs cupim short loin in. Elit exercitation eiusmod dolore cow
 **turkey** shank eu pork belly meatball non cupim.
@@ -55,7 +44,9 @@ Meatball adipisicing ribeye bacon strip steak eu. Consectetur ham hock pork hamb
 mollit quis officia meatloaf tri-tip swine. Cow ut reprehenderit, buffalo incididunt in filet mignon
 strip steak pork belly aliquip capicola officia. Labore deserunt esse chicken lorem shoulder tail consectetur
 cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim capicola irure pancetta chuck
-fugiat.');
+fugiat.
+EOF
+            );
 
             // publish most articles
             if ($this->faker->boolean(70)) {
@@ -64,7 +55,8 @@ fugiat.');
 
             $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
                 ->setHeartCount($this->faker->numberBetween(5, 100))
-                ->setImageFilename($this->faker->randomElement(self::$articleImages));
+                ->setImageFilename($this->faker->randomElement(self::$articleImages))
+            ;
         });
 
         $manager->flush();
