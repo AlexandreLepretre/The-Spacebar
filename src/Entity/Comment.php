@@ -35,6 +35,13 @@ class Comment
     private $content;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     * @var Article
+     */
+    private $article;
+
+    /**
      * @return int
      */
     public function getId()
@@ -76,6 +83,25 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return Article|null
+     */
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    /**
+     * @param Article|null $article
+     * @return $this
+     */
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
 
         return $this;
     }
