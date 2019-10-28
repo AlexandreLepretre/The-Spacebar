@@ -7,16 +7,30 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 
+/**
+ * Class BaseFixture
+ * @package App\DataFixtures
+ */
 abstract class BaseFixture extends Fixture
 {
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     private $manager;
 
-    /** @var Generator */
+    /**
+     * @var Generator
+     */
     protected $faker;
 
+    /**
+     * @param ObjectManager $manager
+     */
     abstract protected function loadData(ObjectManager $manager);
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
@@ -25,11 +39,16 @@ abstract class BaseFixture extends Fixture
         $this->loadData($manager);
     }
 
+    /**
+     * @param string $className
+     * @param int $count
+     * @param callable $factory
+     */
     protected function createMany(string $className, int $count, callable $factory)
     {
         for ($i = 0; $i < $count; $i++) {
             $entity = new $className();
-            $factory($entity, $i);
+            $factory($entity);
 
             $this->manager->persist($entity);
             // store for usage later as App\Entity\ClassName_#COUNT#
