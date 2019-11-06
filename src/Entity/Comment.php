@@ -42,6 +42,12 @@ class Comment
     private $article;
 
     /**
+     * @ORM\Column(type="boolean")
+     * @var bool
+     */
+    private $isDeleted = false;
+
+    /**
      * @return int
      */
     public function getId()
@@ -102,6 +108,25 @@ class Comment
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getIsDeleted(): ?bool
+    {
+        return $this->isDeleted;
+    }
+
+    /**
+     * @param bool $isDeleted
+     * @return $this
+     */
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
 
         return $this;
     }
