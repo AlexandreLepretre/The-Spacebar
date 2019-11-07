@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\CommentRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -13,9 +15,12 @@ class CommentAdminController extends Controller
 {
     /**
      * @Route("/admin/comment", name="comment_admin")
+     * @param CommentRepository $repository
+     * @return Response
      */
-    public function index()
+    public function index(CommentRepository $repository)
     {
-        return $this->render('comment_admin/index.html.twig', ['controller_name' => 'CommentAdminController',]);
+        $comments = $repository->findBy([], ['createdAt' => 'DESC']);
+        return $this->render('comment_admin/index.html.twig', ['comments' => $comments]);
     }
 }
