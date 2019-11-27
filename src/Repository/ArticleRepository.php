@@ -32,20 +32,16 @@ class ArticleRepository extends ServiceEntityRepository
      */
     public function findAllPublishedOrderedByNewest()
     {
-        return $this->addIsPublishedQueryBuilder()
-            ->orderBy('a.publishedAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        return $this->addIsPublishedQueryBuilder()->orderBy('a.publishedAt', 'DESC')->getQuery()->getResult();
     }
 
     /**
-     * @param QueryBuilder|null $qb
+     * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    private function addIsPublishedQueryBuilder(QueryBuilder $qb = null)
+    private function addIsPublishedQueryBuilder(QueryBuilder $queryBuilder = null)
     {
-        return $this->getOrCreateQueryBuilder($qb)
-            ->andWhere('a.publishedAt IS NOT NULL');
+        return $this->getOrCreateQueryBuilder($queryBuilder)->andWhere('a.publishedAt IS NOT NULL');
     }
 
     /**
@@ -53,17 +49,16 @@ class ArticleRepository extends ServiceEntityRepository
      */
     public static function createNonDeletedCriteria(): Criteria
     {
-        return Criteria::create()
-            ->andWhere(Criteria::expr()->eq('isDeleted', false))
+        return Criteria::create()->andWhere(Criteria::expr()->eq('isDeleted', false))
             ->orderBy(['createdAt' => 'DESC']);
     }
 
     /**
-     * @param QueryBuilder|null $qb
+     * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    private function getOrCreateQueryBuilder(QueryBuilder $qb = null)
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null)
     {
-        return $qb ?: $this->createQueryBuilder('a');
+        return $queryBuilder ?: $this->createQueryBuilder('a');
     }
 }
