@@ -5,16 +5,16 @@ namespace App\Controller;
 use App\Repository\CommentRepository;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Class CommentAdminController
  * @package App\Controller
  */
-class CommentAdminController extends Controller
+class CommentAdminController extends AbstractController
 {
     /**
      * @Route("/admin/comment", name="comment_admin")
