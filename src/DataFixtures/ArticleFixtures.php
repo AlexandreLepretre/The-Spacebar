@@ -3,13 +3,15 @@
 namespace App\DataFixtures;
 
 use App\Entity\Article;
+use App\Entity\Tag;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
  * Class ArticleFixtures
  * @package App\DataFixtures
  */
-class ArticleFixtures extends BaseFixture
+class ArticleFixtures extends BaseFixture implements DependentFixtureInterface
 {
     /**
      * @var array
@@ -40,9 +42,13 @@ class ArticleFixtures extends BaseFixture
      */
     public function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function (Article $article) use ($manager) {
-            $article->setTitle($this->faker->randomElement(self::$articleTitles))
-                ->setContent(<<<EOF
+        $this->createMany(
+            Article::class,
+            10,
+            function (Article $article) use ($manager) {
+                $article->setTitle($this->faker->randomElement(self::$articleTitles))
+                    ->setContent(
+                        <<<EOF
 Spicy **jalapeno bacon** ipsum dolor amet veniam shank in dolore. Ham hock nisi landjaeger cow,
 lorem proident [beef ribs](https://baconipsum.com/) aute enim veniam ut cillum pork chuck picanha. Dolore reprehenderit
 labore minim pork belly spare ribs cupim short loin in. Elit exercitation eiusmod dolore cow
@@ -60,18 +66,34 @@ strip steak pork belly aliquip capicola officia. Labore deserunt esse chicken lo
 cow est ribeye adipisicing. Pig hamburger pork belly enim. Do porchetta minim capicola irure pancetta chuck
 fugiat.
 EOF
-                );
+                    );
 
-            // publish most articles
-            if ($this->faker->boolean(70)) {
-                $article->setPublishedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
+                // publish most articles
+                if ($this->faker->boolean(70)) {
+                    $article->setPublishedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
+                }
+
+                $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
+                    ->setHeartCount($this->faker->numberBetween(5, 100))
+                    ->setImageFilename($this->faker->randomElement(self::$articleImages));
+
+                $tags = $this->getRandomReferences(Tag::class, $this->faker->numberBetween(0, 5));
+
+                /** @var Tag $tag */
+                foreach ($tags as $tag) {
+                    $article->addTag($tag);
+                }
             }
-
-            $article->setAuthor($this->faker->randomElement(self::$articleAuthors))
-                ->setHeartCount($this->faker->numberBetween(5, 100))
-                ->setImageFilename($this->faker->randomElement(self::$articleImages));
-        });
+        );
 
         $manager->flush();
+    }
+
+    /**
+     * @return array
+     */
+    public function getDependencies()
+    {
+        return [TagFixture::class];
     }
 }
