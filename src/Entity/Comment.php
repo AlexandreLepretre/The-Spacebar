@@ -7,8 +7,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * Class Comment
- * @package App\Entity
  */
 class Comment
 {
@@ -18,55 +16,40 @@ class Comment
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @var string
      */
     private $authorName;
 
     /**
      * @ORM\Column(type="text")
-     * @var string
      */
     private $content;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
-     * @var Article
      */
     private $article;
 
     /**
      * @ORM\Column(type="boolean")
-     * @var bool
      */
     private $isDeleted = false;
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAuthorName(): ?string
     {
         return $this->authorName;
     }
 
-    /**
-     * @param string $authorName
-     * @return $this
-     */
     public function setAuthorName(string $authorName): self
     {
         $this->authorName = $authorName;
@@ -74,18 +57,11 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     * @return $this
-     */
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -93,18 +69,11 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Article|null
-     */
     public function getArticle(): ?Article
     {
         return $this->article;
     }
 
-    /**
-     * @param Article|null $article
-     * @return $this
-     */
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
@@ -112,18 +81,11 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getIsDeleted(): ?bool
     {
         return $this->isDeleted;
     }
 
-    /**
-     * @param bool $isDeleted
-     * @return $this
-     */
     public function setIsDeleted(bool $isDeleted): self
     {
         $this->isDeleted = $isDeleted;

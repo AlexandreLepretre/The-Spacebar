@@ -3,31 +3,30 @@
 namespace App\Controller;
 
 use App\Repository\CommentRepository;
-use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-/**
- * Class CommentAdminController
- * @package App\Controller
- */
-class CommentAdminController extends AbstractController
+class CommentAdminController extends Controller
 {
     /**
      * @Route("/admin/comment", name="comment_admin")
-     * @param CommentRepository $repository
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     * @return Response
      */
     public function index(CommentRepository $repository, Request $request, PaginatorInterface $paginator)
     {
-        $queryBuilder = $repository->getWithSearchQueryBuilder($request->query->get('q'));
-        /** @var SlidingPagination $pagination */
-        $pagination = $paginator->paginate($queryBuilder, $request->query->getInt('page', 1), 10);
-        return $this->render('comment_admin/index.html.twig', ['pagination' => $pagination]);
+        $q = $request->query->get('q');
+
+        $queryBuilder = $repository->getWithSearchQueryBuilder($q);
+
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
+
+        return $this->render('comment_admin/index.html.twig', [
+            'pagination' => $pagination,
+        ]);
     }
 }
