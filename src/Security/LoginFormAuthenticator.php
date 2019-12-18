@@ -4,7 +4,9 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -22,12 +24,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private UserRepository $userRepository;
 
     /**
+     * @var RouterInterface
+     */
+    private RouterInterface $router;
+
+    /**
      * LoginFormAuthenticator constructor.
      * @param UserRepository $userRepository
+     * @param RouterInterface $router
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, RouterInterface $router)
     {
         $this->userRepository = $userRepository;
+        $this->router = $router;
     }
 
     /**
@@ -58,6 +67,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $this->userRepository->findOneBy(['email' => $credentials['email']]);
     }
 
+    /**
+     * @param array $credentials
+     * @param UserInterface $user
+     * @return bool
+     */
     public function checkCredentials($credentials, UserInterface $user)
     {
         return true;
@@ -65,7 +79,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        dd('Success');
+        return new RedirectResponse($this->router->generate('app_homepage'));
     }
 
     /**
