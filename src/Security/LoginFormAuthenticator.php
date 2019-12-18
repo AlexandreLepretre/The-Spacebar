@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
@@ -54,7 +55,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        return ['email' => $request->request->get('email'), 'password' => $request->request->get('password')];
+        $credentials = ['email' => $request->request->get('email'), 'password' => $request->request->get('password')];
+        $request->getSession()->set(Security::LAST_USERNAME, $credentials['email']);
+        return $credentials;
     }
 
     /**
@@ -77,16 +80,22 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return true;
     }
 
+    /**
+     * @param Request $request
+     * @param TokenInterface $token
+     * @param string $providerKey
+     * @return RedirectResponse
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         return new RedirectResponse($this->router->generate('app_homepage'));
     }
 
     /**
-     * @inheritDoc
+     * @return string
      */
     protected function getLoginUrl()
     {
-        // TODO: Implement getLoginUrl() method.
+        return $this->router->generate('app_login');
     }
 }
