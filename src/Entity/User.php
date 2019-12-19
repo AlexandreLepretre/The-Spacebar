@@ -14,34 +14,54 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @var int
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @var string
      */
-    private $email;
+    private ?string $email = null;
 
     /**
      * @ORM\Column(type="json")
+     * @var array
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @var string
      */
-    private $firstName;
+    private ?string $firstName = null;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
+     */
+    private ?string $password = null;
+
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -52,14 +72,16 @@ class User implements UserInterface
     /**
      * A visual identifier that represents this user.
      *
+     * @return string
      * @see UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
+     * @return array
      * @see UserInterface
      */
     public function getRoles(): array
@@ -71,6 +93,10 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -79,11 +105,12 @@ class User implements UserInterface
     }
 
     /**
+     * @return string
      * @see UserInterface
      */
-    public function getPassword()
+    public function getPassword(): string
     {
-        // not needed for apps that do not check user passwords
+        return $this->password;
     }
 
     /**
@@ -91,7 +118,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed for apps that do not check user passwords
+        // not needed when using bcrypt or argon
     }
 
     /**
@@ -103,14 +130,32 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * @param string $firstName
+     * @return $this
+     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * @param string $password
+     * @return $this
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }
