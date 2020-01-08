@@ -31,17 +31,34 @@ class UserFixture extends BaseFixture
      */
     protected function loadData(ObjectManager $manager)
     {
+        $this->createUsers(10, 'main', 'spacebar%d@example.com');
+        $this->createUsers(3, 'admin', 'admin%d@thespacebar.com', true);
+
+        $manager->flush();
+    }
+
+    /**
+     * @param int $count
+     * @param string $type
+     * @param string $emailFormat
+     * @param bool $admin
+     */
+    protected function createUsers($count, $type, $emailFormat, $admin = false)
+    {
         $this->createMany(
-            10,
-            'main_users',
-            function ($i) {
-                $user = (new User())->setEmail(sprintf('spacebar%d@example.com', $i))
+            $count,
+            $type . '_users',
+            function ($i) use ($emailFormat, $admin) {
+                $user = (new User())->setEmail(sprintf($emailFormat, $i))
                     ->setFirstName($this->faker->firstName);
+
+                if ($admin) {
+                    $user->setRoles(['ROLE_ADMIN']);
+                }
+
                 $user->setPassword($this->passwordEncoder->encodePassword($user, 'engage'));
                 return $user;
             }
         );
-
-        $manager->flush();
     }
 }
