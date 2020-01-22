@@ -56,6 +56,10 @@ class UserFixture extends BaseFixture
                     $user->setRoles(['ROLE_ADMIN']);
                 }
 
+                if ($this->faker->boolean) {
+                    $user->setTwitterUsername($this->faker->userName);
+                }
+
                 $user->setPassword($this->passwordEncoder->encodePassword($user, 'engage'));
                 return $user;
             }
