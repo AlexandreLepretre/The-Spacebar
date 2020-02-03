@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * Class User
+ * @package App\Entity
  */
 class User implements UserInterface
 {
@@ -51,6 +55,17 @@ class User implements UserInterface
      * @var string
      */
     private ?string $twitterUsername = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ApiToken", mappedBy="user", orphanRemoval=true)
+     * @var Collection
+     */
+    private Collection $apiTokens;
+
+    public function __construct()
+    {
+        $this->apiTokens = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -201,5 +216,44 @@ class User implements UserInterface
         }
 
         return $url;
+    }
+
+    /**
+     * @return Collection|ApiToken[]
+     */
+    public function getApiTokens(): Collection
+    {
+        return $this->apiTokens;
+    }
+
+    /**
+     * @param ApiToken $apiToken
+     * @return $this
+     */
+    public function addApiToken(ApiToken $apiToken): self
+    {
+        if (!$this->apiTokens->contains($apiToken)) {
+            $this->apiTokens[] = $apiToken;
+            $apiToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ApiToken $apiToken
+     * @return $this
+     */
+    public function removeApiToken(ApiToken $apiToken): self
+    {
+        if ($this->apiTokens->contains($apiToken)) {
+            $this->apiTokens->removeElement($apiToken);
+            // set the owning side to null (unless already changed)
+            if ($apiToken->getUser() === $this) {
+                $apiToken->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

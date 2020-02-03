@@ -3,22 +3,42 @@
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
+use InvalidArgumentException;
+use LogicException;
 
+/**
+ * Class BaseFixture
+ * @package App\DataFixtures
+ */
 abstract class BaseFixture extends Fixture
 {
-    /** @var ObjectManager */
-    private $manager;
+    /**
+     * @var ObjectManager
+     */
+    private ObjectManager $manager;
 
-    /** @var Generator */
-    protected $faker;
+    /**
+     * @var Generator
+     */
+    protected Generator $faker;
 
-    private $referencesIndex = [];
+    /**
+     * @var array
+     */
+    private array $referencesIndex = [];
 
+    /**
+     * @param ObjectManager $manager
+     * @return mixed
+     */
     abstract protected function loadData(ObjectManager $manager);
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
@@ -37,8 +57,8 @@ abstract class BaseFixture extends Fixture
      *           return $user;
      *      });
      *
-     * @param int      $count
-     * @param string   $groupName Tag these created objects with this group name,
+     * @param int $count
+     * @param string $groupName Tag these created objects with this group name,
      *                            and use this later with getRandomReference(s)
      *                            to fetch only from this specific group.
      * @param callable $factory
@@ -49,7 +69,9 @@ abstract class BaseFixture extends Fixture
             $entity = $factory($i);
 
             if (null === $entity) {
-                throw new \LogicException('Did you forget to return the entity object from your callback to BaseFixture::createMany()?');
+                throw new LogicException(
+                    'Did you forget to return the entity object from your callback to BaseFixture::createMany()?'
+                );
             }
 
             $this->manager->persist($entity);
@@ -59,19 +81,26 @@ abstract class BaseFixture extends Fixture
         }
     }
 
-    protected function getRandomReference(string $groupName) {
+    /**
+     * @param string $groupName
+     * @return object
+     */
+    protected function getRandomReference(string $groupName)
+    {
         if (!isset($this->referencesIndex[$groupName])) {
             $this->referencesIndex[$groupName] = [];
 
             foreach ($this->referenceRepository->getReferences() as $key => $ref) {
-                if (strpos($key, $groupName.'_') === 0) {
+                if (strpos($key, $groupName . '_') === 0) {
                     $this->referencesIndex[$groupName][] = $key;
                 }
             }
         }
 
         if (empty($this->referencesIndex[$groupName])) {
-            throw new \InvalidArgumentException(sprintf('Did not find any references saved with the group name "%s"', $groupName));
+            throw new InvalidArgumentException(
+                sprintf('Did not find any references saved with the group name "%s"', $groupName)
+            );
         }
 
         $randomReferenceKey = $this->faker->randomElement($this->referencesIndex[$groupName]);
@@ -79,6 +108,11 @@ abstract class BaseFixture extends Fixture
         return $this->getReference($randomReferenceKey);
     }
 
+    /**
+     * @param string $className
+     * @param int $count
+     * @return array
+     */
     protected function getRandomReferences(string $className, int $count)
     {
         $references = [];
