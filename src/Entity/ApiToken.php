@@ -84,4 +84,13 @@ class ApiToken
     {
         return $this->user;
     }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function isExpired(): bool
+    {
+        return $this->getExpiresAt() <= new DateTime();
+    }
 }
