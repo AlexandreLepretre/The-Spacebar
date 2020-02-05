@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,12 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ArticleAdminController
  * @package App\Controller
- * @IsGranted("ROLE_ADMIN_ARTICLE")
  */
 class ArticleAdminController extends AbstractController
 {
     /**
      * @Route("/admin/article/new", name="admin_article_new")
+     * @IsGranted("ROLE_ADMIN_ARTICLE")
      * @param EntityManagerInterface $em
      * @return Response
      */
@@ -31,5 +32,18 @@ class ArticleAdminController extends AbstractController
                 $article->getSlug()
             )
         );
+    }
+
+    /**
+     * @Route("/admin/article/{id}/edit")
+     * @param Article $article
+     */
+    public function edit(Article $article)
+    {
+        if ($article->getAuthor() != $this->getUser() && !$this->isGranted('ROLE_ADMIN_ARTICLE')) {
+            throw $this->createAccessDeniedException('No access!');
+        }
+
+        dd($article);
     }
 }
