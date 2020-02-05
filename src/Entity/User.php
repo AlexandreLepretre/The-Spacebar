@@ -62,9 +62,19 @@ class User implements UserInterface
      */
     private Collection $apiTokens;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="author")
+     * @var Collection
+     */
+    private Collection $articles;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     /**
@@ -227,30 +237,38 @@ class User implements UserInterface
     }
 
     /**
-     * @param ApiToken $apiToken
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param Article $article
      * @return $this
      */
-    public function addApiToken(ApiToken $apiToken): self
+    public function addArticle(Article $article): self
     {
-        if (!$this->apiTokens->contains($apiToken)) {
-            $this->apiTokens[] = $apiToken;
-            $apiToken->setUser($this);
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setAuthor($this);
         }
 
         return $this;
     }
 
     /**
-     * @param ApiToken $apiToken
+     * @param Article $article
      * @return $this
      */
-    public function removeApiToken(ApiToken $apiToken): self
+    public function removeArticle(Article $article): self
     {
-        if ($this->apiTokens->contains($apiToken)) {
-            $this->apiTokens->removeElement($apiToken);
+        if ($this->articles->contains($article)) {
+            $this->articles->removeElement($article);
             // set the owning side to null (unless already changed)
-            if ($apiToken->getUser() === $this) {
-                $apiToken->setUser(null);
+            if ($article->getAuthor() === $this) {
+                $article->setAuthor(null);
             }
         }
 
