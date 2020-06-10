@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,21 +15,19 @@ class ArticleAdminController extends AbstractController
     /**
      * @Route("/admin/article/new", name="admin_article_new")
      * @IsGranted("ROLE_ADMIN_ARTICLE")
+     * @param EntityManagerInterface $em
+     * @return Response
      */
     public function new(EntityManagerInterface $em)
     {
-        die('todo');
-
-        return new Response(sprintf(
-            'Hiya! New Article id: #%d slug: %s',
-            $article->getId(),
-            $article->getSlug()
-        ));
+        $form = $this->createForm(ArticleFormType::class);
+        return $this->render('article_admin/new.html.twig', ['articleForm' => $form->createView()]);
     }
 
     /**
      * @Route("/admin/article/{id}/edit")
      * @IsGranted("MANAGE", subject="article")
+     * @param Article $article
      */
     public function edit(Article $article)
     {
