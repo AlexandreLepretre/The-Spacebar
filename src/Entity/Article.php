@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -165,7 +164,7 @@ class Article
 
     public function getImagePath()
     {
-        return 'images/'.$this->getImageFilename();
+        return 'images/' . $this->getImageFilename();
     }
 
     /**
@@ -245,5 +244,13 @@ class Article
         $this->author = $author;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished(): bool
+    {
+        return $this->publishedAt !== null;
     }
 }
