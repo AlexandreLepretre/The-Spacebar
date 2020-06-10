@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Common\Persistence\ManagerRegistry as RegistryInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)

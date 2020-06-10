@@ -10,8 +10,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * Class User
- * @package App\Entity
  */
 class User implements UserInterface
 {
@@ -19,84 +17,63 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @var int
      */
-    private ?int $id = null;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups("main")
-     * @var string
      */
-    private ?string $email = null;
+    private $email;
 
     /**
      * @ORM\Column(type="json")
-     * @var array
      */
-    private array $roles = [];
+    private $roles = [];
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("main")
-     * @var string
      */
-    private ?string $firstName = null;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @var string
      */
-    private ?string $password = null;
+    private $password;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("main")
-     * @var string
      */
-    private ?string $twitterUsername = null;
+    private $twitterUsername;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ApiToken", mappedBy="user", orphanRemoval=true)
-     * @var Collection
      */
-    private Collection $apiTokens;
+    private $apiTokens;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="author")
-     * @var Collection
      */
-    private Collection $articles;
+    private $articles;
 
-    /**
-     * User constructor.
-     */
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
         $this->articles = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return $this
-     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -107,16 +84,14 @@ class User implements UserInterface
     /**
      * A visual identifier that represents this user.
      *
-     * @return string
      * @see UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
-     * @return array
      * @see UserInterface
      */
     public function getRoles(): array
@@ -128,10 +103,6 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param array $roles
-     * @return $this
-     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -140,10 +111,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
      * @see UserInterface
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return $this->password;
     }
@@ -165,18 +135,11 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $firstName
-     * @return $this
-     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -184,10 +147,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param string $password
-     * @return $this
-     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -195,18 +154,11 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTwitterUsername(): ?string
     {
         return $this->twitterUsername;
     }
 
-    /**
-     * @param string|null $twitterUsername
-     * @return $this
-     */
     public function setTwitterUsername(?string $twitterUsername): self
     {
         $this->twitterUsername = $twitterUsername;
@@ -214,13 +166,10 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param int|null $size
-     * @return string
-     */
     public function getAvatarUrl(int $size = null): string
     {
-        $url = sprintf('https://robohash.org/%s', $this->getEmail());
+        $url = 'https://robohash.org/'.$this->getEmail();
+
         if ($size) {
             $url .= sprintf('?size=%dx%d', $size, $size);
         }
@@ -236,6 +185,29 @@ class User implements UserInterface
         return $this->apiTokens;
     }
 
+    public function addApiToken(ApiToken $apiToken): self
+    {
+        if (!$this->apiTokens->contains($apiToken)) {
+            $this->apiTokens[] = $apiToken;
+            $apiToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApiToken(ApiToken $apiToken): self
+    {
+        if ($this->apiTokens->contains($apiToken)) {
+            $this->apiTokens->removeElement($apiToken);
+            // set the owning side to null (unless already changed)
+            if ($apiToken->getUser() === $this) {
+                $apiToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection|Article[]
      */
@@ -244,10 +216,6 @@ class User implements UserInterface
         return $this->articles;
     }
 
-    /**
-     * @param Article $article
-     * @return $this
-     */
     public function addArticle(Article $article): self
     {
         if (!$this->articles->contains($article)) {
@@ -258,10 +226,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param Article $article
-     * @return $this
-     */
     public function removeArticle(Article $article): self
     {
         if ($this->articles->contains($article)) {
@@ -275,9 +239,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function __toString()
     {
         return $this->getFirstName();
