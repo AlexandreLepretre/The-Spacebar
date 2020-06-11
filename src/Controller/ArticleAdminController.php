@@ -26,10 +26,9 @@ class ArticleAdminController extends AbstractController
         $form = $this->createForm(ArticleFormType::class)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $article = (new Article())->setTitle($data['title'])
-                ->setContent($data['content'])
-                ->setAuthor($this->getUser());
+            /** @var Article $article */
+            $article = $form->getData();
+            $article->setAuthor($this->getUser());
             $em->persist($article);
             $em->flush();
 
@@ -54,6 +53,7 @@ class ArticleAdminController extends AbstractController
     /**
      * @Route("/admin/article", name="admin_article_list")
      * @param ArticleRepository $articleRepo
+     * @return Response
      */
     public function list(ArticleRepository $articleRepo)
     {
