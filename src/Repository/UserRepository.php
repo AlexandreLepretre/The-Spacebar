@@ -19,6 +19,14 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @return User[]
+     */
+    public function findAllEmailsAlphabetical()
+    {
+        return $this->createQueryBuilder('u')->orderBy('u.email', 'ASC')->getQuery()->execute();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
