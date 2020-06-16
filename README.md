@@ -21,7 +21,7 @@ composer install
 You may alternatively need to run `php composer.phar install`, depending
 on how you installed Composer.
 
-**Configure the the .env File**
+**Configure the .env File**
 
 First, make sure you have an `.env` file (you should).
 If you don't, copy `.env.dist` to create it.
